@@ -3,7 +3,13 @@ using WordCountTool;
 
 class Program
 {
-    static readonly HashSet<string> _validOptions = ["-c", "-l", "-w", "-m"];
+    static readonly HashSet<string> _validOptions = 
+    [
+        Options.BytesCount, 
+        Options.LinesCount, 
+        Options.WordsCount, 
+        Options.CharactersCount
+    ];
 
     static async Task Main(string[] args)
     {
@@ -20,7 +26,7 @@ class Program
                 }
                 else
                 {
-                    Console.WriteLine("Provided option is invalid.");
+                    Console.Error.WriteLine("Provided option is invalid.");
                     return;
                 }
             }
@@ -30,36 +36,28 @@ class Program
             }
         }
 
-        int otherArgsCount = otherArgs.Count();
+        int otherArgsCount = otherArgs.Count;
         string? filePath = null;
 
         if (otherArgsCount > 1)
         {
-            Console.WriteLine("Provided arguments are invalid.");
+            Console.Error.WriteLine("Provided arguments are invalid.");
             return;
         }
         else if (otherArgsCount == 1)
         {
-            var otherArg = otherArgs.FirstOrDefault();
-
-            if (otherArg != args.LastOrDefault())
-            {
-                Console.WriteLine("Provided arguments order is invalid. Valid format: mywc [OPTION]... [FILE]...");
-                return;
-            }
-
-            filePath = otherArg;
+            filePath = otherArgs.FirstOrDefault();
 
             if (!File.Exists(filePath))
             {
-                Console.WriteLine("Provided file path is not found.");
+                Console.Error.WriteLine("Provided file path is not found.");
                 return;
             }
         }
 
         var options = validOptions.Any()
             ? validOptions
-            : ["-c", "-w", "-l"];
+            : [ Options.BytesCount, Options.WordsCount, Options.LinesCount ];
 
         try
         {
@@ -67,12 +65,12 @@ class Program
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Unexpected error occurred: {ex.Message}");
+            Console.Error.WriteLine($"Unexpected error occurred: {ex.Message}");
         }
     }
 
     static async Task ExecuteWordCount(
-        IEnumerable<string> options,
+        HashSet<string> options,
         string? filePath)
     {
         Stream inputStream;

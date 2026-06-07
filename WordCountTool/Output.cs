@@ -6,12 +6,12 @@ class Output
 {
     private readonly string? _filePath;
 
-    private readonly long _bytesCount; // -c option
-    private readonly long _linesCount; // -l option
-    private readonly long _wordsCount; // -w option
-    private readonly long _charactersCount; // -m option
+    private readonly long _bytesCount;
+    private readonly long _linesCount;
+    private readonly long _wordsCount;
+    private readonly long _charactersCount;
 
-    private readonly IEnumerable<string> _inputOptions;
+    private readonly HashSet<string> _inputOptions;
 
     public Output(
         long bytesCount,
@@ -19,7 +19,7 @@ class Output
         long wordsCount,
         long charactersCount,
         string? filePath,
-        IEnumerable<string> inputOptions)
+        HashSet<string> inputOptions)
     {
         _filePath = filePath;
         _bytesCount = bytesCount;
@@ -34,28 +34,28 @@ class Output
         var stringBuilder = new StringBuilder();
 
         // lines count
-        if (_inputOptions.Contains("-l"))
+        if (_inputOptions.Contains(Options.LinesCount))
         {
             stringBuilder.Append(_linesCount);
             stringBuilder.Append(" ");
         }
 
         // characters count
-        if (_inputOptions.Contains("-m"))
+        if (_inputOptions.Contains(Options.CharactersCount))
         {
             stringBuilder.Append(_charactersCount);
             stringBuilder.Append(" ");
         }
 
         // words count
-        if (_inputOptions.Contains("-w"))
+        if (_inputOptions.Contains(Options.WordsCount))
         {
             stringBuilder.Append(_wordsCount);
             stringBuilder.Append(" ");
         }
 
         // bytes count
-        if (_inputOptions.Contains("-c"))
+        if (_inputOptions.Contains(Options.BytesCount))
         {
             stringBuilder.Append(_bytesCount);
             stringBuilder.Append(" ");

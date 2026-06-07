@@ -4,28 +4,72 @@ using WordCountTool;
 class Program
 {
     static readonly HashSet<string> _validOptions = ["-c", "-l", "-w", "-m"];
+
     static async Task Main(string[] args)
     {
-        var validOptions = args.Where(_validOptions.Contains);
+        // -c -l test.txt
+        HashSet<string> validOptions = []; 
+        List<string> otherArgs = []; 
+
+        foreach (var arg in args)
+        {
+            if (arg.StartsWith('-'))
+            {
+                if (_validOptions.Contains(arg))
+                {
+                    validOptions.Add(arg);
+                }
+                else
+                {
+                    Console.WriteLine("Provided option is invalid.");
+                    return;
+                }
+            }
+            else
+            {
+                otherArgs.Add(arg);
+            }
+        }
+
+        int otherArgsCount = otherArgs.Count();
+        string? filePath = null;
+
+        if (otherArgsCount > 1)
+        {
+            Console.WriteLine("Provided arguments are invalid.");
+            return;
+        }
+        else if (otherArgsCount == 1)
+        {
+            var otherArg = otherArgs.FirstOrDefault();
+
+            if (otherArg != args.LastOrDefault())
+            {
+                Console.WriteLine("Provided arguments order is invalid. Valid format: mywc [OPTION]... [FILE]...");
+                return;
+            }
+
+            filePath = otherArg;
+
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine("Provided file path is not found.");
+                return;
+            }
+        }
+
         var options = validOptions.Any()
             ? validOptions
             : ["-c", "-w", "-l"];
 
-        var filePath = args.FirstOrDefault(a => !a.StartsWith('-'));
-
-        if (filePath is null)
+        try
         {
-            await ExecuteWordCount(options, filePath: null);
-            return;
+            await ExecuteWordCount(options, filePath);
         }
-
-        if (!File.Exists(filePath))
+        catch (Exception ex)
         {
-            Console.WriteLine("Provided file path is not found.");
-            return;
+            Console.WriteLine($"Unexpected error occurred: {ex.Message}");
         }
-
-        await ExecuteWordCount(options, filePath);
     }
 
     static async Task ExecuteWordCount(
@@ -63,14 +107,6 @@ class Program
         {
             bytesCount += bytesRead;
 
-            for (int i = 0; i < bytesRead; i++)
-            {
-                if (byteBuffer[i] == (byte)'\n')
-                {
-                    linesCount++;
-                }
-            }
-
             charsDecoded = decoder.GetChars(
                 byteBuffer,
                 0,
@@ -83,6 +119,11 @@ class Program
             for (int i = 0; i < charsDecoded; i++)
             {
                 char character = charBuffer[i];
+
+                if (character == '\n')
+                {
+                    linesCount++;
+                }
 
                 if (char.IsWhiteSpace(character))
                 {

@@ -99,7 +99,7 @@ class Program
             }
         }
 
-        var result = new Result(
+        var result = new Output(
             bytesCount: bytesCount,
             linesCount: linesCount,
             wordsCount: wordsCount,

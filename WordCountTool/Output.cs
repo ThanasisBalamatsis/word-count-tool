@@ -2,7 +2,7 @@
 
 namespace WordCountTool;
 
-class Result
+class Output
 {
     private readonly string? _filePath;
 
@@ -13,7 +13,7 @@ class Result
 
     private readonly IEnumerable<string> _inputOptions;
 
-    public Result(
+    public Output(
         long bytesCount,
         long linesCount,
         long wordsCount,

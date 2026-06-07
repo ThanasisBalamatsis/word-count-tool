@@ -1,6 +1,6 @@
 # mywc — Word Count Tool
 
-A streaming C# / .NET 10 implementation of the Unix `wc` command, built as part of John Crickett's [Coding Challenges](https://codingchallenges.fyi/challenges/challenge-wc).
+A C# / .NET 10 implementation of the Unix `wc` command, built as part of John Crickett's [Coding Challenges](https://codingchallenges.fyi/challenges/challenge-wc).
 
 ## Options
 

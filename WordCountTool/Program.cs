@@ -59,7 +59,7 @@ class Program
         bool inWord = false;
         long charactersCount = 0;
 
-        while ((bytesRead = stream.Read(byteBuffer, 0, byteBuffer.Length)) > 0)
+        while ((bytesRead = await stream.ReadAsync(byteBuffer, 0, byteBuffer.Length)) > 0)
         {
             bytesCount += bytesRead;
 

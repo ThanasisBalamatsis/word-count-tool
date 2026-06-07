@@ -7,7 +7,6 @@ class Program
 
     static async Task Main(string[] args)
     {
-        // -c -l test.txt
         HashSet<string> validOptions = []; 
         List<string> otherArgs = []; 
 
